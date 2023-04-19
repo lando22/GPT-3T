@@ -50,7 +50,7 @@ class TextDataset(Dataset):
         return self.data[idx]
 
       
- def train_model(model_params, dataloader, epochs=10, learning_rate=0.00004, grad_clip=1.0):
+def train_model(model_params, dataloader, epochs=10, learning_rate=0.00004, grad_clip=1.0):
     vocab_size, d_model, nhead, num_layers, dropout = model_params
     model = GPT(vocab_size, d_model, nhead, num_layers, dropout=dropout)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=0.01)
