@@ -6,7 +6,7 @@ GPT-3T is an experiment designed to see what happens if you force a GPT model to
 
 My reason for building GPT-3T is I suspect that training large language models to predict further into the future could potentially lead to models that can do better multistep reasoning because the pretraining objective forces them to "think further ahead".
 
-I want to disclose that I could be incredibly off, but the experiement is worth trying. At a small scale, GPT-3T shows *some* promise, but is severly limited so far because of its very minimal data and model size.
+I want to disclose that I could be incredibly off in my thinking, but the experiement is worth trying. At a small scale, GPT-3T shows *some* promise, but is severly limited so far because of its very minimal data and model size.
 
 ## Overview
 
