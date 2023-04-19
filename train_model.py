@@ -50,47 +50,47 @@ class TextDataset(Dataset):
         return self.data[idx]
 
       
-def train_model(model_params, dataloader, epochs=10, learning_rate=0.00004, grad_clip=1.0):
-    vocab_size, d_model, nhead, num_layers, dropout = model_params
-    model = GPT(vocab_size, d_model, nhead, num_layers, dropout=dropout)
-    optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=0.01)
-    scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=len(dataloader)*epochs)
-    criterion = nn.CrossEntropyLoss()
+      
+def train_model(vocab_size, d_model, nhead, num_layers, dataloader, dropout=0.1, epochs=10, learning_rate=0.00004, grad_clip=1.0):
+  model = GPT(vocab_size, d_model, nhead, num_layers, dropout=dropout)
+  optimizer = optim.Adam(model.parameters(), lr=learning_rate, weight_decay=0.01)
+  scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=len(dataloader) * epochs)
+  criterion = nn.CrossEntropyLoss()
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model.to(device)
-    
-    for epoch in range(epochs):
-        start_time = time.time()
-        total_loss = 0.0
-        total_batches = len(dataloader)
+  device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+  model = model.to(device)
+  
+  for epoch in range(epochs):
+      start_time = time.time()
+      total_loss = 0.0
+      total_batches = len(dataloader)
 
-        progress_bar = tqdm(dataloader, desc=f"Epoch {epoch + 1}/{epochs}", unit="batch")
+      progress_bar = tqdm(dataloader, desc=f"Epoch {epoch + 1}/{epochs}", unit="batch")
 
-        model.train()
-        for input_seq, target_seq in progress_bar:
-            input_seq = input_seq.to(device)
-            target_seq = target_seq.to(device)
+      model.train()
+      for input_seq, target_seq in progress_bar:
+          input_seq = input_seq.to(device)
+          target_seq = target_seq.to(device)
 
-            output = model(input_seq)
-            output = output[:, -3:, :]
+          output = model(input_seq)
+          output = output[:, -3:, :]
 
-            loss = criterion(output.reshape(-1, vocab_size), target_seq.reshape(-1))
-            loss = loss.mean()
-            optimizer.zero_grad()
-            loss.backward()
+          loss = criterion(output.reshape(-1, vocab_size), target_seq.reshape(-1))
+          loss = loss.mean()
+          optimizer.zero_grad()
+          loss.backward()
 
-            # Apply gradient clipping
-            torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+          # Apply gradient clipping
+          torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
 
-            optimizer.step()
-            scheduler.step()  # Update learning rate scheduler
+          optimizer.step()
+          scheduler.step()  # Update learning rate scheduler
 
-            total_loss += loss.item()
-            progress_bar.set_postfix({"Batch Loss": loss.item()})
+          total_loss += loss.item()
+          progress_bar.set_postfix({"Batch Loss": loss.item()})
 
-        avg_train_loss = total_loss / total_batches
-        elapsed_time = time.time() - start_time
+      avg_train_loss = total_loss / total_batches
+      elapsed_time = time.time() - start_time
 
-    # Print average train loss and elapsed time for the current epoch
-    print(f"Epoch [{epoch+1}/{epochs}], Average Loss: {avg_train_loss:.4f}, Elapsed Time: {elapsed_time:.2f}s")
+  # Print average train loss and elapsed time for the current epoch
+  print(f"Epoch [{epoch+1}/{epochs}], Average Loss: {avg_train_loss:.4f}, Elapsed Time: {elapsed_time:.2f}s")
