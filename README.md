@@ -2,7 +2,7 @@
 
 **This repo is not fully complete. The tokenizing functions could be much improved for memory efficiency and training could be optimized**
 
-GPT-3T is a GPT model designed to predict further into the future by predicting 3 tokens at a time, instead of just one. This model is built using PyTorch and the tokenizers library.
+GPT-3T is an experiment designed to see what happens if you force a GPT model to predict further into the future by predicting 3 tokens at a time, instead of just one. This model is built using PyTorch and the tokenizers library.
 
 My reason for building GPT-3T is I suspect that training large language models to predict further into the future could potentially lead to models that can do better multistep reasoning because the pretraining objective forces them to "think further ahead".
 
