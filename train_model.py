@@ -61,37 +61,36 @@ def train_model(model_params, dataloader, epochs=10, learning_rate=0.00004, grad
     model = model.to(device)
     
     for epoch in range(epochs):
-    start_time = time.time()
-    total_loss = 0.0
-    total_batches = len(dataloader)
-    
-    progress_bar = tqdm(dataloader, desc=f"Epoch {epoch + 1}/{epochs}", unit="batch")
-    
-    model.train()
-    for input_seq, target_seq in progress_bar:
-        input_seq = input_seq.to(device)
-        target_seq = target_seq.to(device)
-        
-        output = model(input_seq)
-        output = output[:, -3:, :]
-        
-        loss = criterion(output.reshape(-1, vocab_size), target_seq.reshape(-1))
-        loss = loss.mean()
-        optimizer.zero_grad()
-        loss.backward()
+        start_time = time.time()
+        total_loss = 0.0
+        total_batches = len(dataloader)
 
-        # Apply gradient clipping
-        torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
-        
-        optimizer.step()
-        scheduler.step()  # Update learning rate scheduler
-        
-        total_loss += loss.item()
-        progress_bar.set_postfix({"Batch Loss": loss.item()})
-    
-    avg_train_loss = total_loss / total_batches
+        progress_bar = tqdm(dataloader, desc=f"Epoch {epoch + 1}/{epochs}", unit="batch")
 
-    elapsed_time = time.time() - start_time
+        model.train()
+        for input_seq, target_seq in progress_bar:
+            input_seq = input_seq.to(device)
+            target_seq = target_seq.to(device)
+
+            output = model(input_seq)
+            output = output[:, -3:, :]
+
+            loss = criterion(output.reshape(-1, vocab_size), target_seq.reshape(-1))
+            loss = loss.mean()
+            optimizer.zero_grad()
+            loss.backward()
+
+            # Apply gradient clipping
+            torch.nn.utils.clip_grad_norm_(model.parameters(), grad_clip)
+
+            optimizer.step()
+            scheduler.step()  # Update learning rate scheduler
+
+            total_loss += loss.item()
+            progress_bar.set_postfix({"Batch Loss": loss.item()})
+
+        avg_train_loss = total_loss / total_batches
+        elapsed_time = time.time() - start_time
 
     # Print average train loss and elapsed time for the current epoch
     print(f"Epoch [{epoch+1}/{epochs}], Average Loss: {avg_train_loss:.4f}, Elapsed Time: {elapsed_time:.2f}s")
