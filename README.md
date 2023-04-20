@@ -36,12 +36,14 @@ from preprocess_data import preprocess_data
 
 datafile = "<datafile.txt>"
 
-dataloader, tokenizer = preprocess_data(datafile)
+dataloader, tokenizer = preprocess_data(datafile, sequence_length=1024)
+
+# 1.5 Billion param config
 train_model(
     vocab_size=52000,
-    d_model=512,
-    nhead=8,
-    num_layers=8,
+    d_model=1600,
+    nhead=25,
+    num_layers=48,
     dropout=0.1,
     dataloader=dataloader
 )
