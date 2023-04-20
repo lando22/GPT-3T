@@ -36,7 +36,7 @@ from preprocess_data import preprocess_data
 
 datafile = "<datafile.txt>"
 
-dataloader, tokenizer = preprocess_data(datafile, sequence_length=1024)
+dataloader, tokenizer = preprocess_data(datafile, sequence_length=1024, batch_size=16)
 
 # 1.5 Billion param config
 train_model(
