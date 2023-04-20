@@ -80,3 +80,9 @@ There is no particular reasoning behind this choice other than it seems to be a 
 While the main intention for this repo is to experiment with a GPT model that predicts more than one token at a time step, this repo could easily be refactored to be a general pre-training library for vanilla GPT models.
 
 Writing code to pre-train GPT models can be complex and time-consuming, but this script can be run by anyone (assuming they have the hardware to do so). Updates will be made to dynamically change how many tokens you are predicting.
+
+
+## Todo
+* Add ability to change token pre-training objective
+* Optimize tokenizing
+* Build inference functions
