@@ -45,7 +45,8 @@ train_model(
     nhead=25,
     num_layers=48,
     dropout=0.1,
-    dataloader=dataloader
+    dataloader=dataloader,
+    epochs=6
 )
 
 ```
