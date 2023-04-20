@@ -3,7 +3,7 @@ from tokenizers.models import BPE
 from tokenizers.trainers import BpeTrainer
 from tokenizers.pre_tokenizers import Whitespace
 from torch.utils.data import DataLoader, Dataset
-from .train_model import TextDataset
+from train_model import TextDataset
 
 # Train a BPE tokenizer on the dataset
 def train_bpe_tokenizer(file_path, vocab_size=52000):
