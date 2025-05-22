@@ -1,6 +1,6 @@
 # GPT-3T
 
-**This repo is not fully complete. The tokenizing functions could be much improved for memory efficiency and training could be optimized**
+**This repo is experimental. Tokenization and training have been improved for better memory usage and performance, but the project is still evolving.**
 
 GPT-3T is an experiment designed to see what happens if you force a GPT model to predict further into the future by predicting 3 tokens at a time, instead of just one. This model is built using PyTorch and the tokenizers library.
 
@@ -36,7 +36,12 @@ from preprocess_data import preprocess_data
 
 datafile = "<datafile.txt>"
 
-dataloader, tokenizer = preprocess_data(datafile, sequence_length=1024, batch_size=16)
+dataloader, tokenizer = preprocess_data(
+    datafile,
+    sequence_length=1024,
+    batch_size=16,
+    num_workers=4,  # use multiple workers for faster loading
+)
 
 # 1.5 Billion param config
 train_model(
@@ -46,7 +51,8 @@ train_model(
     num_layers=48,
     dropout=0.1,
     dataloader=dataloader,
-    epochs=6
+    epochs=6,
+    use_amp=True,  # enable mixed precision training
 )
 
 ```
@@ -62,6 +68,9 @@ You can customize the model and training parameters by modifying the default val
 * epochs: The number of training epochs.
 * learning_rate: The learning rate for the optimizer.
 * grad_clip: The gradient clipping value.
+* num_workers: Number of worker processes used for data loading.
+* use_amp: Enable PyTorch's automatic mixed precision for faster training.
+* The TextDataset class generates samples on-the-fly to reduce memory usage.
 
 ## Summarized Experiments
 
